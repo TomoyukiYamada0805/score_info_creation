@@ -25,14 +25,14 @@ func main() {
   //if err != nil{
   //	  fmt.Printf("Failed")
   //}
-  err = src.Db.Connection()
+  err = Db.Connection()
   if err != nil {
       log.Fatal(err)
   }
-	defer src.Db.Close()
+	defer Db.Close()
 
   doc.Find("#modSoccerSchedule02 > .modBody > .partsTable > table > tbody > tr").Each(func(i int, s *goquery.Selection) {
-    err = src.Db.Transaction(func(db *sql.Tx) error {
+    err = Db.Transaction(func(db *sql.Tx) error {
       if s.Find(".score > .status").Text() == "試合終了" {
         matchUrl, exists := s.Find(".score > a").Attr("href")
         fmt.Println(matchUrl)
