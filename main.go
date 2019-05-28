@@ -10,21 +10,16 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "time"
   "log"
+  "os"
 )
 
 func main() {
   // :=演算子は初期値を宣言する
-  doc, err := goquery.NewDocument("https://soccer.yahoo.co.jp/jleague/league/j1")
-  //doc, err := goquery.NewDocument("https://soccer.yahoo.co.jp/jleague/schedule/j1/10/all")
+  doc, err := goquery.NewDocument(os.Getenv("TARGET_URL"))
   if err != nil {
       fmt.Printf("Failed")
   }
 
-  //db, err := sql.Open("mysql", "root:@/soccor_scoring_development")
-  ////db, err := sql.Open("mysql", "be3622c3dba887:72d4f74d@tcp(us-cdbr-iron-east-02.cleardb.net:3306)/heroku_02e85bd01702801?")
-  //if err != nil{
-  //	  fmt.Printf("Failed")
-  //}
   err = Db.Connection()
   if err != nil {
       log.Fatal(err)
@@ -67,7 +62,6 @@ func main() {
           }
       
           for i, col := range values {
-            // Here we can check if the value is nil (NULL value)
             if col == nil {
               value = "NULL"
             } else {
@@ -83,7 +77,7 @@ func main() {
          
         }else if value == "0" {
   
-          doc, err := goquery.NewDocument("https://soccer.yahoo.co.jp/"+matchUrl)
+          doc, err := goquery.NewDocument(os.Getenv("TARGET_DOMAIN")+matchUrl)
   
           if err != nil {
               fmt.Printf("Failed")
@@ -589,8 +583,7 @@ var Db MyDB
 // Connection
 func (m *MyDB) Connection() error {
   var err error
-  //m.db, err = sql.Open("mysql", "root:@/soccor_scoring_development")
-  m.db, err = sql.Open("mysql", "hhvuafdv51p2lm3d:zpzmno3c34ywxu76@tcp(pfw0ltdr46khxib3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306)/l1crt4uh0916tivw?")
+  m.db, err = sql.Open("mysql", os.Getenv("DB_INFO"))
   if err != nil {
       return err
   }
