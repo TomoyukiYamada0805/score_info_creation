@@ -1,1 +1,0 @@
-web: jleague_scraping
